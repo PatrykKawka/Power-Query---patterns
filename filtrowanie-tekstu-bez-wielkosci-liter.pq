@@ -1,0 +1,37 @@
+// ============================================================
+// NAZWA: Filtrowanie tekstu bez rozróżniania wielkości liter
+// KATEGORIA: Kolumny i transformacje
+// FOLDING: CZĘŚCIOWO — proste porównania Comparer.OrdinalIgnoreCase na kolumnie
+//          źródłowej zwykle foldują się do SQL/BigQuery jako UPPER()/LOWER();
+//          sprawdź "View Native Query" przy dużych źródłach
+// ZŁOŻONOŚĆ: O(1) na wiersz
+// WYMAGANIA WEJŚCIOWE: kolumna tekstowa [Miasto]
+// ============================================================
+
+// a) Porównanie do konkretnych wartości, bez rozróżniania wielkości liter
+Filtered =
+    Table.SelectRows(
+        Source,
+        each
+            Comparer.OrdinalIgnoreCase([Miasto], "Warszawa") = 0
+            or Comparer.OrdinalIgnoreCase([Miasto], "Kraków") = 0
+    )
+
+// b) To samo, ale krócej przy liście wielu wartości — List.Contains z comparerem
+Filtered =
+    Table.SelectRows(
+        Source,
+        each
+            List.Contains(
+                {"Warszawa", "Kraków", "Gdynia"},
+                [Miasto],
+                Comparer.OrdinalIgnoreCase
+            )
+    )
+
+// c) Filtrowanie "zawiera fragment", bez rozróżniania wielkości liter
+Filtrowanie =
+    Table.SelectRows(
+        Źródło,
+        each Text.Contains([Miasto], "krak", Comparer.OrdinalIgnoreCase)
+    )
