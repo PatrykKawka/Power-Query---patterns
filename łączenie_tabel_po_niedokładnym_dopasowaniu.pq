@@ -1,15 +1,9 @@
-// ============================================================
-// NAZWA: Fuzzy Merge — łączenie tabel z tolerancją na literówki/niespójny zapis
-// KATEGORIA: Funkcje wielokrotnego użytku
 // FOLDING: NIE, NIGDY — fuzzy matching to algorytm czysto lokalny
 // ZŁOŻONOŚĆ: znacząco większa niż zwykły join (porównania przybliżone między
 //            wieloma parami wierszy) — kosztowne obliczeniowo
 // WYMAGANIA WEJŚCIOWE: dwie tabele z kolumną tekstową do dopasowania
-// NOWY WZORZEC — dodany w ramach audytu repo
+// CASE USE: łączysz dane sprzedażowe z listą klientów z innego systemu, gdzie nazwy firm są wpisane niespójnie ("ABC Sp. z o.o." vs "ABC sp zoo").
 // ============================================================
-//
-// CASE USE: łączysz dane sprzedażowe z listą klientów z innego systemu, gdzie
-// nazwy firm są wpisane niespójnie ("ABC Sp. z o.o." vs "ABC sp zoo").
 
 let
     Source = SprzedażTabela,
@@ -31,7 +25,4 @@ let
 in
     Rozwinięcie
 
-// ZASTRZEŻENIE WYDAJNOŚCIOWE: fuzzy merge nie folduje się nigdy i jest
-// kosztowny obliczeniowo — sensowny na dziesiątkach tysięcy wierszy, nie
-// milionach. Dla dużych wolumenów zawęź zbiór PRZED fuzzy matchem (np. po
-// pierwszej literze nazwy albo mieście), żeby ograniczyć liczbę porównywanych par.
+// ZASTRZEŻENIE WYDAJNOŚCIOWE: fuzzy merge nie folduje się nigdy i jest kosztowny obliczeniowo — sensowny na dziesiątkach tysięcy wierszy, nie milionach. Dla dużych wolumenów zawęź zbiór PRZED fuzzy matchem (np. po pierwszej literze nazwy albo mieście), żeby ograniczyć liczbę porównywanych par.
