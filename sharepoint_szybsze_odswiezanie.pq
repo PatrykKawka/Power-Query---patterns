@@ -1,6 +1,3 @@
-// ============================================================
-// NAZWA: Szybsze odświeżanie plików z SharePoint (Contents zamiast Files)
-// KATEGORIA: Źródła i wydajność
 // FOLDING: N/D — to zmiana samego konektora, nie transformacja danych
 // ZŁOŻONOŚĆ: N/D — poprawa dotyczy czasu połączenia, nie złożoności obliczeniowej
 // WYMAGANIA WEJŚCIOWE: adres witryny SharePoint
@@ -14,18 +11,12 @@
 SharePoint.Files("https://firma.sharepoint.com/sites/nazwa_folderu/", [ApiVersion = 15])
 
 
-// ROZWIĄZANIE: zmień konektor w pasku formuły na SharePoint.Contents() —
-// pokazuje foldery zamiast płaskiej listy plików i jest znacznie szybszy
-// przy odświeżaniu, bo nawiguje strukturę zamiast skanować wszystko naraz.
+// ROZWIĄZANIE: zmień konektor w pasku formuły na SharePoint.Contents() — pokazuje foldery zamiast płaskiej listy plików i jest znacznie szybszy
+//przy odświeżaniu, bo nawiguje strukturę zamiast skanować wszystko naraz.
 
 SharePoint.Contents("https://firma.sharepoint.com/sites/nazwa_folderu/", [ApiVersion = 15])
 
 // Aby wypakować zawartość plików/skoroszytów po przejściu do właściwego folderu:
-// POPRAWKA względem oryginału: Table.AddColumns (liczba mnoga) przyjmuje LISTĘ
-// specyfikacji kolumn, a nie pojedynczą kolumnę — do dodania jednej kolumny
-// właściwa funkcja to Table.AddColumn (liczba pojedyncza). Poprawiono też
-// odwołanie do kroku: "Poprzedni krok" w cudzysłowie to string literal, a nie
-// referencja do kroku — potrzebne #"Poprzedni krok".
 
 NowyKrok =
     Table.AddColumn(
