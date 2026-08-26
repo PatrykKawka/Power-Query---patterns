@@ -1,10 +1,6 @@
-// ============================================================
-// NAZWA: Postępowanie z brakującymi kolumnami przy Table.SelectColumns
-// KATEGORIA: Jakość danych i błędy
 // FOLDING: TAK zwykle — sam SelectColumns folduje się, o ile wcześniejsze kroki też
 // ZŁOŻONOŚĆ: O(1)
-// WYMAGANIA WEJŚCIOWE: brak — dotyczy sytuacji, gdy źródło czasem nie ma
-//                       którejś z oczekiwanych kolumn (np. rozjechany eksport)
+// WYMAGANIA WEJŚCIOWE: brak — dotyczy sytuacji, gdy źródło czasem nie ma którejś z oczekiwanych kolumn (np. rozjechany eksport)
 // ============================================================
 
 Wybrane_kolumny =
