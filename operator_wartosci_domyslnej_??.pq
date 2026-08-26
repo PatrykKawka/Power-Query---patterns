@@ -1,14 +1,8 @@
-// ============================================================
-// NAZWA: Operator wartości domyślnej ?? (null-coalescing)
-// KATEGORIA: Operator domyślny i inne idiomy
-// FOLDING: TAK zwykle — proste wyrażenia z ?? na kolumnach źródłowych foldują
-//          się do COALESCE()/ISNULL() w SQL Server/BigQuery
+// FOLDING: TAK zwykle — proste wyrażenia z ?? na kolumnach źródłowych foldują się do COALESCE()/ISNULL() w SQL Server/BigQuery
 // ZŁOŻONOŚĆ: O(1) na wiersz
-// WYMAGANIA WEJŚCIOWE: brak
 // ============================================================
 //
-// Symbol ?? w Power Query (język M) to operator wartości domyślnej
-// (null-coalescing operator).
+// Symbol ?? w Power Query (język M) to operator wartości domyślnej (null-coalescing operator).
 
 // 1) Podstawa: jeśli wartość1 ≠ null → zwraca wartość1; jeśli null → zwraca wartość2
 wartość1 ?? wartość2
@@ -29,6 +23,4 @@ wartość1 ?? wartość2
 
 
 // 5) Filtrowanie z uwzględnieniem null-i — bez ?? filtr domyślnie ODFILTROWUJE
-// wiersze z null (bo null > 50 zwraca null, nie false); z ?? 0 dostają wartość
-// porównywalną i są jawnie potraktowane jako niespełniające warunku
-each ([Kolumna] ?? 0) > 50
+// wiersze z null (bo null > 50 zwraca null, nie false); z ?? 0 dostają wartośćporównywalną i są jawnie potraktowane jako niespełniające warunkueach ([Kolumna] ?? 0) > 50
