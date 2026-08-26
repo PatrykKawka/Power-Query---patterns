@@ -1,6 +1,3 @@
-// ============================================================
-// NAZWA: Filtrowanie tekstu bez rozróżniania wielkości liter
-// KATEGORIA: Kolumny i transformacje
 // FOLDING: CZĘŚCIOWO — proste porównania Comparer.OrdinalIgnoreCase na kolumnie
 //          źródłowej zwykle foldują się do SQL/BigQuery jako UPPER()/LOWER();
 //          sprawdź "View Native Query" przy dużych źródłach
