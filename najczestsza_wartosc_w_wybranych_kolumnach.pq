@@ -1,11 +1,6 @@
-// ============================================================
-// NAZWA: Najczęściej występująca wartość w wierszu (Top 3, z listą kolumn źródłowych)
-// KATEGORIA: Grupowanie i funkcje okienkowe
 // FOLDING: NIE — logika per-wiersz z Record.Field/List.Select jest lokalna
-// ZŁOŻONOŚĆ: O(k² ) na wiersz, k = liczba porównywanych kolumn (tu: 5 dni tygodnia) —
-//            akceptowalne dla małego, stałego k; nie skalować bezmyślnie na dziesiątki kolumn
-// WYMAGANIA WEJŚCIOWE: kolumny [PONIEDZIALEK]..[PIATEK] z wartościami do zliczenia
-//                       (np. godziny otwarcia per dzień tygodnia)
+// ZŁOŻONOŚĆ: O(k² ) na wiersz, k = liczba porównywanych kolumn (tu: 5 dni tygodnia) — akceptowalne dla małego, stałego k; nie skalować bezmyślnie na dziesiątki kolumn
+// WYMAGANIA WEJŚCIOWE: kolumny [PONIEDZIALEK]..[PIATEK] z wartościami do zliczenia  (np. godziny otwarcia per dzień tygodnia)
 // ============================================================
 
 let
@@ -32,14 +27,8 @@ let
                         [CZWARTEK],
                         [PIATEK]
                     },
-
-                    // Usuwamy null-e z rankingu
                     NonNullValues = List.RemoveNulls(ValuesList),
-
-                    // Unikalne wartości
                     DistinctValues = List.Distinct(NonNullValues),
-
-                    // Dla każdej wartości: {wartość, liczba wystąpień, pierwsza pozycja}
                     ValueCounts =
                         List.Transform(
                             DistinctValues,
@@ -122,8 +111,3 @@ let
         )
 in
     ExpandedColumns
-
-// UWAGA: przy więcej niż kilkunastu porównywanych kolumnach warto rozważyć
-// przepisanie na Table.UnpivotOtherColumns (patrz 03-kolumny-dynamiczne/
-// unpivot-dynamiczny.pq) + Table.Group — czytelniejsze i łatwiejsze do
-// rozszerzenia o kolejne dni/kolumny bez ręcznej edycji list.
