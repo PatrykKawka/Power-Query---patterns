@@ -1,15 +1,11 @@
-// ============================================================
-// NAZWA: Grupowanie z własną funkcją statystyczną (poza min/max/sum/median)
-// KATEGORIA: Grupowanie i funkcje okienkowe
-// FOLDING: NIE — funkcje List.StandardDeviation/List.Median wywołane w 'each'
+FOLDING: NIE — funkcje List.StandardDeviation/List.Median wywołane w 'each'
 //          nie mają odpowiednika w natywnym zapytaniu SQL/BigQuery generowanym
 //          przez Power Query, więc ten krok zawsze przerywa folding
 // ZŁOŻONOŚĆ: O(n) na grupę dla większości funkcji List.*
 // WYMAGANIA WEJŚCIOWE: tabela z kolumnami [Oddział], [Sprzedaż]
 // ============================================================
 
-// Domyślny interfejs grupowania w Power Query oferuje tylko: Sum, Count,
-// Min, Max, Median, All Rows. Więcej statystyk — trzeba dopisać w edytorze M.
+// Domyślny interfejs grupowania w Power Query oferuje tylko: Sum, Count, Min, Max, Median, All Rows. Więcej statystyk — trzeba dopisać w edytorze M.
 
 // a) Odchylenie standardowe
 Table.Group(
