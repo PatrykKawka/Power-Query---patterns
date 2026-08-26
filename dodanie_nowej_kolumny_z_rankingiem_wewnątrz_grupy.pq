@@ -1,14 +1,7 @@
-// ============================================================
-// NAZWA: Ranking wewnątrz grupy
-// KATEGORIA: Grupowanie i funkcje okienkowe
 // FOLDING: NIE — Table.Group z 'each' przerywa folding
 // ZŁOŻONOŚĆ: O(n log n) na grupę (sortowanie) + O(n) na indeksowanie
 // WYMAGANIA WEJŚCIOWE: nazwa kolumny do grupowania i kolumny do sortowania
 // ============================================================
-//
-// POPRAWKA względem oryginału: brakujący nawias klamrowy przy liście kolumn
-// grupujących ({KOLUMNA_DO_GRUPOWANIA"} → {"KOLUMNA_DO_GRUPOWANIA"}) oraz
-// niedomknięty nawias Table.Group — kod w oryginalnej wersji nie parsował się.
 
 let
     Ranking_grupowanie =
@@ -30,12 +23,10 @@ let
             }
         ),
 
-    // Table.Group tworzy zagnieżdżoną strukturę (jedna tabela na grupę)
-    // — trzeba połączyć wszystkie podtabele z powrotem w jedną płaską tabelę.
+    // Table.Group tworzy zagnieżdżoną strukturę (jedna tabela na grupę) — trzeba połączyć wszystkie podtabele z powrotem w jedną płaską tabelę.
     Wynik_grupowania =
         Table.Combine(Ranking_grupowanie[Dane])
 in
     Wynik_grupowania
 
-// UWAGA: Order.Descending oznacza, że ranking 1 = najwyższa wartość w grupie.
-// Dla rankingu rosnącego (1 = najniższa wartość) zmień na Order.Ascending.
+// UWAGA: Order.Descending oznacza, że ranking 1 = najwyższa wartość w grupie. Dla rankingu rosnącego (1 = najniższa wartość) zmień na Order.Ascending.
