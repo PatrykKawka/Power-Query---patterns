@@ -1,15 +1,7 @@
-// ============================================================
-// NAZWA: Kolumna niestandardowa z wieloma warunkami (bez zagnieżdżonych if)
-// KATEGORIA: Kolumny i transformacje
 // FOLDING: TAK (dla prostych porównań na kolumnach źródłowych z SQL/BigQuery)
 // ZŁOŻONOŚĆ: O(k) na wiersz, k = liczba warunków
 // WYMAGANIA WEJŚCIOWE: kolumna liczbowa/tekstowa do testowania w [Kolumna]
 // ============================================================
-
-// Alternatywa dla łańcucha if...then...else if...
-// Dwie równoległe listy: warunki i odpowiadające im wyniki.
-// List.PositionOf(Warunki, true) zwraca indeks pierwszego warunku spełnionego jako true,
-// a ten sam indeks jest użyty do pobrania wyniku z listy Wyniki.
 
 = Table.AddColumn(
     Source,
