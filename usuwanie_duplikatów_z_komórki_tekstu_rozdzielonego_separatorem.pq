@@ -4,7 +4,7 @@
 // WYMAGANIA WEJŚCIOWE: kolumna tekstowa z wartościami rozdzielonymi przecinkiem, np. [Kategorie sprzedaży] = "B2B, B2B, Retail, retail "
 // ============================================================
 let
-    Źródło = ...,  // wczytaj dane źródłowe
+    Źródło = ..., 
     Rozdzielone = Table.TransformColumns(Źródło, {"Kategorie sprzedaży", each Text.Split(_, ","), type list}),
     UsunięcieSpacji = Table.TransformColumns(Rozdzielone, {"Kategorie sprzedaży", each List.Transform(_, Text.Trim)}),
     NormalizacjaWielkosciLiter = Table.TransformColumns(UsunięcieSpacji, {"Kategorie sprzedaży", each List.Transform(_, Text.Proper)}),
