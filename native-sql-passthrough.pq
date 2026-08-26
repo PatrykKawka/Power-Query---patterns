@@ -1,14 +1,8 @@
-// ============================================================
-// NAZWA: Natywny SQL Passthrough — gwarantowana wydajność serwera
-// KATEGORIA: Źródła i wydajność
-// FOLDING: TAK z definicji — cała logika wykonuje się po stronie serwera,
-//          bo to Ty piszesz SQL, a nie liczysz na to, że GUI go wygeneruje
+//FOLDING: TAK z definicji — cała logika wykonuje się po stronie serwera,  bo to Ty piszesz SQL, a nie liczysz na to, że GUI go wygeneruje
 // ZŁOŻONOŚĆ: zależna wyłącznie od zapytania SQL i indeksów po stronie serwera
-// WYMAGANIA WEJŚCIOWE: aktywne połączenie ODBC/natywne do źródła;
-//                       uprawnienia do wykonania zapytania SQL wprost
+// WYMAGANIA WEJŚCIOWE: aktywne połączenie ODBC/natywne do źródła; uprawnienia do wykonania zapytania SQL wprost
 // ============================================================
 
-// --- SQL SERVER ---
 
 let
     Źródło =
@@ -73,10 +67,8 @@ let
 in
     Wynik
 
-// RÓŻNICA WZGLĘDEM SQL SERVER: BigQuery standard SQL wymaga backtick ` `
-// wokół pełnej ścieżki tabeli (projekt.zbior_danych.tabela) oraz konwencji
-// snake_case dla nazw kolumn — dopasuj do tego, jak wygląda Twoje źródło
-// po stronie BigQuery po migracji.
+// RÓŻNICA WZGLĘDEM SQL SERVER: BigQuery standard SQL wymaga backtick ` `wokół pełnej ścieżki tabeli (projekt.zbior_danych.tabela) oraz konwencji
+// snake_case dla nazw kolumn — dopasuj do tego, jak wygląda Twoje źródło po stronie BigQuery po migracji.
 
 
 // --- WARIANT Z PARAMETREM POWER QUERY (dynamiczny zakres dat) ---
@@ -95,18 +87,3 @@ let
 in
     Wynik
 
-// KIEDY STOSOWAĆ ZAMIAST GUI:
-// - gdy wiesz, że dana logika (window function, CTE, złożony JOIN) i tak nie
-//   sfolduje się przez kroki M — piszesz ją raz w SQL i masz gwarancję
-//   wykonania po stronie serwera
-// - gdy chcesz jawnie kontrolować plan zapytania (hints, indeksy) zamiast
-//   liczyć na to, co Power Query wygeneruje samo
-//
-// PUŁAPKI:
-// - Value.NativeQuery bywa domyślnie traktowany jako operacja NIEBEZPIECZNA
-//   przez Power Query (ostrzeżenie o Native Database Query) — przy odświeżaniu
-//   przez bramkę danych (Gateway) może wymagać włączenia "Native Database
-//   Queries" w ustawieniach źródła danych, inaczej odświeżanie się wywali.
-// - EnableFolding = true nie gwarantuje, że WSZYSTKIE kolejne kroki M się
-//   złożą — nadal warto sprawdzać przez "View Native Query" po dodaniu
-//   kroków po tym miejscu.
