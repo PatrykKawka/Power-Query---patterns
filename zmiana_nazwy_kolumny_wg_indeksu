@@ -1,6 +1,3 @@
-// ============================================================
-// NAZWA: Zmiana nazw kolumn na podstawie ich położenia (indeksu)
-// KATEGORIA: Kolumny dynamiczne
 // FOLDING: TAK zwykle — Table.RenameColumns jest lekką operacją metadanych
 // ZŁOŻONOŚĆ: O(k) — k = liczba zmienianych nazw
 // WYMAGANIA WEJŚCIOWE: brak; Power Query indeksuje kolumny od 0
@@ -14,6 +11,3 @@
     }
 )
 
-// Przydatne przy plikach źródłowych, gdzie nagłówki są niestabilne
-// (puste, zduplikowane, wygenerowane automatycznie), ale pozycja kolumny
-// jest stała między odświeżeniami.
