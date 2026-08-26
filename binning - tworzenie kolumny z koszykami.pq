@@ -1,6 +1,3 @@
-// ============================================================
-// NAZWA: Kolumna z przedziałami (binning)
-// KATEGORIA: Kolumny i transformacje
 // FOLDING: NIE — logika each z wieloma krokami wewnątrz zwykle przerywa folding;
 //          sam Number.IntegerDivide bywa foldowalny, ale konkatenacja tekstu już nie
 // ZŁOŻONOŚĆ: O(1) na wiersz (warianty a, b); O(log k) / O(k) na wiersz dla wariantu
@@ -32,8 +29,6 @@
 
 
 // 2a. Koszyki o RÓŻNEJ szerokości — kilka przedziałów, ręczny if-else
-// POPRAWKA: ostatnia gałąź opisywała ">30", a logicznie (po przejściu warunków
-// >=65, >=45, >=30) obejmuje wartości PONIŻEJ 30 — etykieta była odwrócona.
 
 let
     zmienna = [kolumna]
@@ -44,8 +39,7 @@ in
     else "<30"
 
 
-// 2b. Koszyki o różnej szerokości — wersja dynamiczna dla większej liczby
-// przedziałów, sterowana listą granic (bez łańcucha if-else)
+// 2b. Koszyki o różnej szerokości — wersja dynamiczna dla większej liczby przedziałów, sterowana listą granic (bez łańcucha if-else)
 
 = Table.AddColumn(
     Source,
@@ -72,9 +66,3 @@ in
             Text.From(Start) & "-" & Text.From(End),
     type text
 )
-
-// UWAGA do wariantu 2b: jeśli Age jest mniejszy niż pierwsza granica (0) lub
-// większy/równy ostatniej granicy (101), ValidBoundaries może być pustą listą
-// albo Position+1 wyjdzie poza zakres — warto dodać na wejściu walidację
-// (np. Table.SelectRows odfiltrowujące wartości spoza [0, 100]) albo opakować
-// całość w `try ... otherwise "poza zakresem"`.
