@@ -1,17 +1,7 @@
-// ============================================================
-// NAZWA: Heavy User — klient obecny w N różnych miesiącach w fact_Wizyty
-// KATEGORIA: Grupowanie i funkcje okienkowe
-// FOLDING: TAK dla kroków liczących (Table.Distinct, Table.Group z Count) —
-//          w odróżnieniu od wzorców z List.Distinct w 'each', ten wzorzec
-//          NIE przerywa foldingu, o ile źródło (fact_Wizyty) samo się folduje
-// ZŁOŻONOŚĆ: O(n log n) po stronie silnika (dystynkcja + grupowanie) —
-//            tania operacja na serwerze, znacznie tańsza niż liczenie
-//            List.Distinct per klient w M
-// WYMAGANIA WEJŚCIOWE: fact_Wizyty z kolumną klucza klienta [IDKlienta]
-//                       oraz albo gotową kolumną [rok/mc], albo [Data];
-//                       dim_Klienci z kolumną [IDKlienta] do dołączenia flagi
-// PARAMETR: ProgHeavyUser (typ: liczba całkowita, domyślnie 3) — próg liczby
-//           różnych miesięcy wymaganych do statusu Heavy User
+//FOLDING: TAK dla kroków liczących (Table.Distinct, Table.Group z Count) — w odróżnieniu od wzorców z List.Distinct w 'each', ten wzorzec NIE przerywa foldingu, o ile źródło (fact_Wizyty) samo się folduje
+// ZŁOŻONOŚĆ: O(n log n) po stronie silnika (dystynkcja + grupowanie) —  tania operacja na serwerze, znacznie tańsza niż liczenie  List.Distinct per klient w M
+// WYMAGANIA WEJŚCIOWE: fact_Wizyty z kolumną klucza klienta [IDKlienta]  oraz albo gotową kolumną [rok/mc], albo [Data]; dim_Klienci z kolumną [IDKlienta] do dołączenia flagi
+// PARAMETR: ProgHeavyUser (typ: liczba całkowita, domyślnie 3) — próg liczby różnych miesięcy wymaganych do statusu Heavy User
 // ============================================================
 
 // --- WARIANT A: masz już kolumnę [rok/mc] w fact_Wizyty ---
@@ -50,8 +40,7 @@ in
 let
     Źródło = fact_Wizyty,
 
-    // Dodaj klucz miesiąca z daty — RRRRMM jako liczba, foldowalne do wyrażenia
-    // arytmetycznego (YEAR(Data)*100+MONTH(Data)) w SQL/BigQuery
+    // Dodaj klucz miesiąca z daty — RRRRMM jako liczba
     DodajRokMiesiac =
         Table.AddColumn(
             Źródło,
@@ -112,30 +101,11 @@ let
 in
     UzupelnijBraki
 
-// DLACZEGO TAK, A NIE PRZEZ List.Distinct W GRUPOWANIU (patrz
-// grupowanie-wlasna-funkcja-statystyczna.pq):
-// - Table.Distinct na parze kolumn i Table.Group z agregacją Table.RowCount to
-//   standardowe operacje relacyjne — Power Query potrafi je złożyć do jednego
-//   zapytania SQL (SELECT IDKlienta, COUNT(*) FROM (SELECT DISTINCT IDKlienta,
-//   rok_mc FROM fact_Wizyty) GROUP BY IDKlienta).
-// - Wersja z List.Distinct([rok/mc]) w 'each' wewnątrz Table.Group policzy to
-//   samo, ale ZAWSZE lokalnie — przy dużej tabeli faktów (miliony wizyt)
-//   różnica w czasie odświeżania jest odczuwalna.
-// - Sprawdź "View Native Query" po kroku DodajFlage — jeśli źródło to SQL
-//   Server/BigQuery, ten wzorzec ma dobre szanse na pełny folding aż do tego miejsca.
-//
-// UWAGA DO PROGU: ProgHeavyUser jako parametr Power Query (nie stała "3" wpisana
-// na sztywno) — zmiana definicji "Heavy User" w przyszłości to jedna edycja
-// parametru zamiast szukania liczby w kodzie.
-
 
 // ============================================================
 // WARIANT C: Heavy User = TEN SAM ODDZIAŁ odwiedzony w N różnych miesiącach
 // (odmienny od Wariantów A/B, gdzie liczyły się miesiące łącznie, niezależnie
 // od tego, ile różnych oddziałów klient odwiedził)
-// FOLDING: TAK dla kroków 1-3 (Table.Distinct, Table.Group z Count) — TAK SAMO
-//          jak Warianty A/B. Krok 4 (ZwinDoKlienta) przerywa folding, bo
-//          Table.Sort wewnątrz 'each' na podtabeli grupy jest operacją lokalną.
 // WYMAGANIA WEJŚCIOWE: fact_Wizyty z [IDKlienta], [OddzialID] oraz [rok/mc]/[Data]
 // ============================================================
 
@@ -174,11 +144,9 @@ let
             type logical
         ),
 
-    // 4) Zwinięcie do poziomu klienta — klient może być HU w kilku oddziałach naraz,
-    // więc trzeba zdecydować, jak to zagregować do jednego wiersza na klienta.
-    // UWAGA: ten krok gubi informację o TYM KONKRETNYM oddziale, w którym klient
-    // jest HU (poza przybliżeniem OddzialGlowny) — patrz WARIANT C-BRIDGE niżej,
-    // jeśli potrzebujesz filtrować/krzyżować HU z oddziałem w raportach.
+    // 4) Zwinięcie do poziomu klienta — klient może być HU w kilku oddziałach naraz, więc trzeba zdecydować, jak to zagregować do jednego wiersza na klienta.
+    // UWAGA: ten krok gubi informację o TYM KONKRETNYM oddziale, w którym klient jest HU (poza przybliżeniem OddzialGlowny) — patrz WARIANT C-BRIDGE niżej, 
+    //jeśli potrzebujesz filtrować/krzyżować HU z oddziałem w raportach.
     ZwinDoKlienta =
         Table.Group(
             DodajFlageOddzial,
@@ -254,13 +222,11 @@ in
 
 
 // --- WARIANT C-BRIDGE: gdy trzeba filtrować/krzyżować HU z konkretnym oddziałem ---
-// Stosuj, gdy raport ma pokazywać np. macierz Oddział × Heavy User, albo
-// "pokaż Heavy Userów oddziału X" — pojedyncza flaga na dim_Klienci (wariant
-// powyżej) nie wystarczy, bo zwija/gubi informację o TYM, w KTÓRYM oddziale
+// Stosuj, gdy raport ma pokazywać np. macierz Oddział × Heavy User, albo "pokaż Heavy Userów oddziału X" — pojedyncza flaga na dim_Klienci (wariant 
+//powyżej) nie wystarczy, bo zwija/gubi informację o TYM, w KTÓRYM oddziale
 // klient jest HU (poza przybliżeniem OddzialGlowny).
 //
-// Zamiast zwijać do poziomu klienta (pomiń krok 4 ZwinDoKlienta), dołącz
-// wynik kroku 3 (DodajFlageOddzial — poziom klient-oddział) jako OSOBNĄ
+// Zamiast zwijać do poziomu klienta (pomiń krok 4 ZwinDoKlienta), dołącz wynik kroku 3 (DodajFlageOddzial — poziom klient-oddział) jako OSOBNĄ
 // tabelę pomostową w modelu danych:
 //
 //   dim_Klienci (1) ---- (*) bridge_KlientOddzialHU (*) ---- (1) dim_Oddzialy
@@ -270,13 +236,9 @@ in
 // - z dim_Klienci po kluczu IDKlienta
 // - z dim_Oddzialy po kluczu OddzialID
 //
-// Ta tabela zostaje bliżej natywnej granularności faktów (klient-oddział-flaga)
-// i pozwala DAX-owi/wizualizacjom filtrować po dowolnej kombinacji klient
+// Ta tabela zostaje bliżej natywnej granularności faktów (klient-oddział-flaga) i pozwala DAX-owi/wizualizacjom filtrować po dowolnej kombinacji klient
 // i/lub oddział bez utraty informacji przy wcześniejszym zwijaniu w Power Query.
 
 BridgeKlientOddzialHU = DodajFlageOddzial  // <- do załadowania jako osobna tabela w modelu
 
-// PRZED ZAŁADOWANIEM DO MODELU: rozważ czy klient z definicji ma "swój" jeden
-// oddział (wtedy wielokrotne wiersze na klienta w bridge to sygnał do walidacji
-// danych źródłowych, nie normalny stan), czy wielo-oddziałowość jest oczekiwana
-// biznesowo — to założenie warto zweryfikować przed użyciem tego wariantu.
+
