@@ -1,13 +1,9 @@
-// ============================================================
-// NAZWA: Podział kolumny / pobranie tekstu przed-po przy wielu możliwych ogranicznikach
-// KATEGORIA: Kolumny i transformacje
 // FOLDING: NIE — Text.PositionOf w pętli po liście ograniczników jest operacją lokalną
 // ZŁOŻONOŚĆ: O(d) na wiersz — d = liczba możliwych ograniczników
 // WYMAGANIA WEJŚCIOWE: kolumna tekstowa [kolumna] / [Dane]
 // ============================================================
 
-// 1. Podział kolumny — kilka możliwych ograniczników na raz
-// Gdy kolumna może zawierać różne separatory, przekaż je jako listę.
+// 1. Podział kolumny — kilka możliwych ograniczników na raz. Gdy kolumna może zawierać różne separatory, przekaż je jako listę.
 
 = Table.SplitColumn(
     Source,
@@ -16,10 +12,8 @@
     {"kolumna1", "kolumna2"}
 )
 
-
 // 2. Tekst PRZED pierwszym występującym ogranicznikiem (spośród kilku możliwych)
-// Text.BeforeDelimiter działa tylko dla jednego, znanego z góry ogranicznika —
-// dla wielu możliwych trzeba najpierw znaleźć pozycję najbliższego.
+// Text.BeforeDelimiter działa tylko dla jednego, znanego z góry ogranicznika — dla wielu możliwych trzeba najpierw znaleźć pozycję najbliższego.
 
 = Table.AddColumn(
     Source,
@@ -46,10 +40,8 @@
     type text
 )
 
-
 // 3. Tekst PO pierwszym występującym ograniczniku (spośród kilku możliwych)
-// Analogicznie, ale trzeba dodatkowo ustalić, KTÓRY ogranicznik wystąpił jako
-// pierwszy, żeby wiedzieć ile znaków pominąć.
+// Analogicznie, ale trzeba dodatkowo ustalić, KTÓRY ogranicznik wystąpił jako pierwszy, żeby wiedzieć ile znaków pominąć.
 
 = Table.AddColumn(
     Source,
