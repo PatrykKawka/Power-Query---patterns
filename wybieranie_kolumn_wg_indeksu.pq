@@ -1,17 +1,7 @@
-// ============================================================
-// NAZWA: Wybieranie kolumn na podstawie ich pozycji
-// KATEGORIA: Kolumny dynamiczne
-// FOLDING: CZĘŚCIOWO — Table.SelectColumns zwykle folduje się (odpowiednik SELECT
-//          z listą kolumn); logika budowania listy nazw jest lokalna, ale nie
-//          wpływa na folding samego SelectColumns
+// FOLDING: CZĘŚCIOWO — Table.SelectColumns zwykle folduje się (odpowiednik SELECT  z listą kolumn); logika budowania listy nazw jest lokalna, ale nie   wpływa na folding samego SelectColumns
 // ZŁOŻONOŚĆ: O(k) — k = liczba wybieranych kolumn
-// WYMAGANIA WEJŚCIOWE: brak — działa na dowolnej tabeli; Power Query indeksuje
-//                       kolumny i listy od 0
+// WYMAGANIA WEJŚCIOWE: brak — działa na dowolnej tabeli; Power Query indeksuje kolumny i listy od 0
 // ============================================================
-//
-// POPRAWKA względem oryginału: `Nazwy_kolumn{15}` zwraca POJEDYNCZĄ wartość
-// (tekst), a List.Combine oczekuje listy list — trzeba opakować w {...}.
-// Poprawiono też literówkę w nazwie kroku ("Wybieranie)kolumn" → "WybraneKolumny").
 
 let
     Nazwy_kolumn = Table.ColumnNames(Source),
@@ -27,7 +17,6 @@ let
     Wynik = Table.SelectColumns(Source, WybraneKolumny)
 in
     Wynik
-
 
 // Można też wybierać pierwsze/ostatnie N lub pomijać wybrane kolumny:
 
