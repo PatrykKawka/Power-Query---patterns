@@ -1,31 +1,20 @@
-// ============================================================
-// NAZWA: Zamiana wartości w kolumnie na zasadzie słownika (3 warianty)
-// KATEGORIA: Jakość danych i błędy
 // FOLDING: Szablon 1 i 2 — NIE (logika w 'each' na poziomie wartości)
-//          Szablon 3 — CZĘŚCIOWO, jeśli TabelaMapowan jest osobnym query
-//          wskazującym na tabelę SQL/BigQuery, Table.NestedJoin może się foldować
-// ZŁOŻONOŚĆ: Szablon 1/2 — O(k) na wiersz (k = rozmiar słownika, dla Szablonu 2 O(1)
-//            dzięki Record.HasFields); Szablon 3 — zależny od implementacji joina,
-//            zwykle O(n log n) lub lepiej
+//          Szablon 3 — CZĘŚCIOWO, jeśli TabelaMapowan jest osobnym query wskazującym na tabelę SQL/BigQuery, Table.NestedJoin może się foldować
+// ZŁOŻONOŚĆ: Szablon 1/2 — O(k) na wiersz (k = rozmiar słownika, dla Szablonu 2 O(1) dzięki Record.HasFields); Szablon 3 — zależny od implementacji joina, zwykle O(n log n) lub lepiej
 // WYMAGANIA WEJŚCIOWE: kolumna tekstowa [NazwaKolumny] do zamiany
 // ============================================================
 //
 // KIEDY KTÓREGO UŻYĆ:
-// Szablon 1 (List.PositionOf) — codzienne użycie, do ~20 zamian. Dwie równoległe
-// listy, jeden krok w zapytaniu, żadnej pętli ani zagnieżdżonych if-else.
+// Szablon 1 (List.PositionOf) — codzienne użycie, do ~20 zamian. Dwie równoległe listy, jeden krok w zapytaniu, żadnej pętli ani zagnieżdżonych if-else.
 //
 // Szablon 2 (Record.Field) — gdy wolisz parę klucz=wartość zamiast dwóch list.
-// Pułapka: klucze rekordu muszą być poprawnymi identyfikatorami M — spacje
-// i znaki specjalne wymagają notacji #"wartość ze spacją".
+// Pułapka: klucze rekordu muszą być poprawnymi identyfikatorami M — spacje i znaki specjalne wymagają notacji #"wartość ze spacją".
 //
-// Szablon 3 (join z tabelą) — gdy słownik zamian jest duży, współdzielony między
-// wieloma zapytaniami albo pochodzi z zewnętrznego źródła. TabelaMapowan jako
-// osobne zapytanie Power Query = "single source of truth": edytujesz w jednym
-// miejscu, zmiana propaguje się wszędzie, gdzie zapytanie jest referencjonowane.
+// Szablon 3 (join z tabelą) — gdy słownik zamian jest duży, współdzielony między wieloma zapytaniami albo pochodzi z zewnętrznego źródła. TabelaMapowan jako
+// osobne zapytanie Power Query = "single source of truth": edytujesz w jednym miejscu, zmiana propaguje się wszędzie, gdzie zapytanie jest referencjonowane.
 
 
 // --- Szablon 1 ---
-// POPRAWKA: w oryginale brakowało domykającego nawiasu Table.TransformColumns.
 let
     StareWartosci = {"wartość_1", "wartość_2", "wartość_3"},
     NoweWartosci  = {"nowa_1",    "nowa_2",    "nowa_3"},
@@ -72,11 +61,6 @@ in
 
 
 // --- Szablon 3 ---
-// POPRAWKA: oryginał mieszał kroki NestedJoin/ExpandTableColumn z ręczną próbą
-// odtworzenia "coalesce" przez indeksowanie po wartości — niepotrzebnie
-// skomplikowane i podatne na błąd przy duplikatach w kolumnie "Nowa". Poniżej
-// uproszczona, poprawna wersja: left outer join + wypełnienie braków wartością
-// oryginalną (klasyczny wzorzec "zachowaj, gdy brak dopasowania w słowniku").
 let
     // Tabela mapowań: dwie kolumny — "Stara" i "Nowa".
     // Może pochodzić z Excela, CSV, bazy danych albo być osobnym zapytaniem
