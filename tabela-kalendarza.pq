@@ -1,8 +1,4 @@
-// ============================================================
-// NAZWA: Tabela kalendarza generowana z zakresu dat w tabeli faktów
-// KATEGORIA: Daty i kalendarz
-// FOLDING: NIE — List.Dates i kolejne kolumny liczone są operacją lokalną
-//          (typowe dla tabeli kalendarza — generowana raz, nie trzeba foldować)
+// FOLDING: NIE — List.Dates i kolejne kolumny liczone są operacją lokalną (typowe dla tabeli kalendarza — generowana raz, nie trzeba foldować)
 // ZŁOŻONOŚĆ: O(d) — d = liczba dni w zakresie (zwykle tania operacja jednorazowa)
 // WYMAGANIA WEJŚCIOWE: tabela źródłowa tbl_fact z kolumną [Data]
 // ============================================================
@@ -32,7 +28,6 @@ let
                 {"RokKwartal", each Date.Year([Data]) * 10 + Date.QuarterOfYear([Data]), Int64.Type},
                 {"CzyWeekend", each Date.DayOfWeek([Data], Day.Monday) >= 5, type logical},
                 {"CzyDzis", each [Data] = Date.From(DateTime.LocalNow()), type logical},
-                {"CzyWPrzyszlosci", each [Data] > Date.From(DateTime.LocalNow()), type logical},
                 {"Rok-Kwartał", each Text.From(Date.Year([Data])) & "-Q" & Text.From(Date.QuarterOfYear([Data])), type text},
                 {"Rok-MiesiacTekst", each Date.ToText([Data], "yyyy-MM"), type text},
                 {"Rok-MiesiacNazwa", each Date.ToText([Data], "yyyy MMM"), type text},
@@ -43,8 +38,3 @@ let
 in
     Kalendarz
 
-// UWAGA WYDAJNOŚCIOWA: kolumny "CzyDzis" i "CzyWPrzyszlosci" wywołują
-// DateTime.LocalNow() dla KAŻDEGO wiersza osobno — funkcyjnie poprawne
-// (bo wynik jest stały w obrębie odświeżenia), ale czytelniej i nieco szybciej
-// jest policzyć DzisiajZmienna = Date.From(DateTime.LocalNow()) RAZ jako osobny
-// krok let, a potem odwoływać się do tej zmiennej w obu kolumnach.
