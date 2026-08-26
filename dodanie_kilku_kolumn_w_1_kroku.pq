@@ -1,15 +1,9 @@
-// ============================================================
-// NAZWA: Dodanie kilku kolumn niestandardowych w jednym kroku
-// KATEGORIA: Kolumny i transformacje
 // FOLDING: CZĘŚCIOWO — zależy od operacji wewnątrz rekordu; proste działania
 //          arytmetyczne na kolumnach źródłowych zwykle foldują się do SQL/BigQuery
 // ZŁOŻONOŚĆ: O(1) na wiersz
 // WYMAGANIA WEJŚCIOWE: kolumny [kolumna_x], [kolumna_y], [kolumna_z]
 // ============================================================
 
-// CEL: dodać 3 kolumny liczone na raz, zamiast trzech osobnych kroków
-// "Dodaj kolumnę niestandardową" (co tworzy 3 osobne, kaskadowe kroki M).
-//
 // KROKI W INTERFEJSIE:
 // 1. Kolumna niestandardowa → w edytorze wpisz rekord z wieloma polami:
 //    [
