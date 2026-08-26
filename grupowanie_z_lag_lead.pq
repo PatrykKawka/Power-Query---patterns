@@ -1,17 +1,10 @@
-// ============================================================
-// NAZWA: LAG i LEAD (wartość poprzednia/następna) wewnątrz grupy
-// KATEGORIA: Grupowanie i funkcje okienkowe
-// FOLDING: NIE — Table.Group z 'each' operującym na indeksowanej liście
-//          zawsze przerywa folding do SQL/BigQuery
+// FOLDING: NIE — Table.Group z 'each' operującym na indeksowanej liście zawsze przerywa folding do SQL/BigQuery
 // ZŁOŻONOŚĆ: O(n) na grupę (dostęp do listy po indeksie to O(1))
-// WYMAGANIA WEJŚCIOWE: tabela z kolumnami [Oddział], [Data], [Sprzedaż];
-//                       dane NIE muszą być posortowane wcześniej — sortowanie
-//                       odbywa się wewnątrz każdej grupy
+// WYMAGANIA WEJŚCIOWE: tabela z kolumnami [Oddział], [Data], [Sprzedaż]; dane NIE muszą być posortowane wcześniej — sortowanie odbywa się wewnątrz każdej grupy
 // ============================================================
 
 // Schemat ogólny dla wszystkich wzorców okienkowych w tym folderze:
-// Group --> Sort --> AddIndexColumn --> lista wartości --> odwołanie po indeksie
-//        --> AddColumn z wynikiem --> ExpandTableColumn na końcu
+// Group --> Sort --> AddIndexColumn --> lista wartości --> odwołanie po indeksie --> AddColumn z wynikiem --> ExpandTableColumn na końcu
 
 let
     Grupowanie =
