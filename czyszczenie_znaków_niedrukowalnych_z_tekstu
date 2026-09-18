@@ -1,0 +1,49 @@
+1. OPIS DZIAŁANIA:
+   - Usuwa nierozdrukowalne znaki sterujące (Control Characters) z zakresu ASCII 0–31.
+   - Wyłapuje m.in.: 
+     * Enter / Nowa linia: #(lf) / Character.FromNumber(10)
+     * Powrót karetki:     #(cr) / Character.FromNumber(13)
+     * Tabulatory:         #(tab) / Character.FromNumber(9)
+
+2. CZEGO TEXT.CLEAN NIE USUWA (UWAGI):
+   - Zwykłych spacji (ze środka, początku ani końca tekstu).
+   - Twardej spacji / Nierozdzielającej spacji (Non-breaking space): 
+     * ASCII / Unicode 160 -> Character.FromNumber(160) lub #(00A0)
+     * Często występuje w danych wklejanych z WWW lub Excela.
+   - Zwykłych znaków interpunkcyjnych (kropki, przecinki, myślniki).
+
+3. BEST PRACTICE (Pełne czyszczenie tekstu):
+   Sama funkcja Text.Clean często nie wystarcza. Najlepsze efekty daje połączenie:
+   Text.Replace (zamiana twardych spacji) + Text.Clean (usunięcie enterów/tabów) + Text.Trim (usunięcie spacji brzegowych).
+========================================================================================
+*/
+
+let
+    // Tabela testowa z problematycznym tekstem (Entery, Taby, Twarda Spacja [160] oraz spacje brzegowe)
+    Source = Table.FromRecords({
+        [
+            Opis = "  Jan" & Character.FromNumber(10) & "Kowalski" & Character.FromNumber(160) & "  "
+        ]
+    }),
+
+    // 1. Użycie samego Text.Clean (pozostawia twardą spację 160 i zwykłe spacje brzegowe)
+    #"Tylko Text.Clean" = Table.TransformColumns(
+        Source, 
+        {{"Opis", each Text.Clean(_), type text}}
+    ),
+
+    // 2. Wzorcowe / Kompletne czyszczenie tekstu (Clean + Zamiana 160 + Trim)
+    #"Kompletne Czyszczenie" = Table.TransformColumns(
+        Source, 
+        {{
+            "Opis", 
+            each Text.Trim(
+                Text.Clean(
+                    Text.Replace(_, Character.FromNumber(160), " ")
+                )
+            ), 
+            type text
+        }}
+    )
+in
+    #"Kompletne Czyszczenie"
