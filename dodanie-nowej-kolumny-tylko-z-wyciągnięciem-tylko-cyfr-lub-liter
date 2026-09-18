@@ -1,0 +1,18 @@
+  #"Dodano kolumnę niestandardową" = Table.AddColumn(
+    #"Source", 
+    "tylko_cyfry", 
+    //Text.Select - pobiera wszystkie znaki z zakresu podanego jako argument - cyfry od 0 do 9, {"a".."z"} - wszystkie znaki od a do z, funkcja jest case sensitive
+    //Text.Remove - działa odwrotnie - usuwa znaki podane jako lista. Text.Remove([KodProdukt], {"a".."z"} & {"A".."Z"} & {"-"}) - usuwa wszystkie znaki podane w listach
+    each Text.Select([id_zamówienia], {"0" .. "9"}), type text
+  )
+
+    
+   //można uzywać też w innych przypadkach
+    a) Czyszczenie numerów telefonów (Usuwanie spacji i znaków)
+    Text.Remove([Telefon], {" ", "-", "(", ")", "+"})
+
+    b)Baza słów: Usuwanie znaków interpunkcyjnych
+    Text.Remove([Opinia], {".", ",", "!", "?", ";", ":", "-", """"})
+
+    c) Zaawansowane: Usuwanie niewidocznych znaków (NSP / Enter / Tabulator)
+    Text.Remove([Komentarz], {Character.FromNumber(9), Character.FromNumber(10), Character.FromNumber(13)})
